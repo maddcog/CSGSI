@@ -153,6 +153,11 @@ namespace CSGSI
                 // Listener was Closed due to call of Stop();
                 return;
             }
+            catch(System.Net.HttpListenerException)
+            {
+                // This exception occurs if the app is shutting down when a new game state comes in
+                return;
+            }
             finally
             {
                 _waitForConnection.Set();
@@ -192,7 +197,7 @@ namespace CSGSI
         {
             if (!EnableRaisingIntricateEvents)
                 return;
-            
+
             if (RoundPhaseChanged != null)
             {
                 if (gs.Previously.Round.Phase != RoundPhase.Undefined &&
@@ -263,7 +268,7 @@ namespace CSGSI
                 }
             }
         }
-        
+
         /// <summary>
         /// Is raised when the round phase changes (for example "Live", "FreezeTime" etc.).
         /// </summary>
